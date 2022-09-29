@@ -5,16 +5,33 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     private Animator playerAnim;
+    [SerializeField] private Animator swordAnim;
     // Start is called before the first frame update
     void Start()
     {
-        playerAnim = GetComponent<Animator>();
+        playerAnim = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
    
-    public void Move()
+    public void Move(float move)
     {
-
+        playerAnim.SetFloat("Move",Mathf.Abs(move));
     }
+
+    public void Jump(bool isJumping)
+    {
+        playerAnim.SetBool("isJumping", isJumping);
+    }
+
+    public void Attack()
+    {
+        playerAnim.SetTrigger("Attack");
+    }
+
+    public void SwordArc()
+    {
+        swordAnim.SetTrigger("SwordArc");
+    }
+    
 }
