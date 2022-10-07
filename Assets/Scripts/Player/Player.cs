@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour, IDamagable
 {
@@ -30,7 +31,7 @@ public class Player : MonoBehaviour, IDamagable
         playerAnimation = GetComponent<PlayerAnimation>();
         playerSprite =GetComponentInChildren<SpriteRenderer>();
         swordSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-      
+        health = 4;
     }
 
     // Update is called once per frame
@@ -49,8 +50,8 @@ public class Player : MonoBehaviour, IDamagable
     void Movement()
     {
         //taking players horizontalInput
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        if (Input.GetKeyDown(KeyCode.Space) && OnGrounded() == true)
+        float horizontalInput = CrossPlatformInputManager.GetAxisRaw("Horizontal");
+        if (CrossPlatformInputManager.GetButtonDown("A_Button") && OnGrounded() == true)
         {
             playerRb.velocity = new Vector2(playerRb.velocity.x, jumpForce);
             StartCoroutine(JumpReset());
@@ -119,7 +120,7 @@ public class Player : MonoBehaviour, IDamagable
 
     void Attack()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (CrossPlatformInputManager.GetButtonDown("B_Button"))
         {
             
             playerAnimation.Attack();
@@ -129,6 +130,22 @@ public class Player : MonoBehaviour, IDamagable
 
     public void Damage()
     {
+        if(health < 1)
+        {
+            return;
+        }
         Debug.Log("Player Damage");
+        health--;
+        if(health < 1)
+        {
+            playerAnimation.Death();
+        }
+        UIManager.Instance.UpdateLives(health);
+    }
+
+    public void AddGems(int amount)
+    {
+        Diamonds += amount;
+        UIManager.Instance.UpdateGemCount(Diamonds);
     }
 }

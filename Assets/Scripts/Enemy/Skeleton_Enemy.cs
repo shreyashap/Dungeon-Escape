@@ -24,6 +24,9 @@ public class Skeleton_Enemy : Enemy , IDamagable
 
     public void Damage()
     {
+        if (isDead == true)
+            return;
+
         Debug.Log("Skeleton Damage");
 
         health--;
@@ -35,7 +38,12 @@ public class Skeleton_Enemy : Enemy , IDamagable
         {
             isDead = true;
             anim.SetTrigger("Death");
-            
+
+            GameObject _diamond = Instantiate(diamondPrefab, transform.position, Quaternion.identity) as GameObject;
+
+            _diamond.GetComponent<Diamond>().gem = base.gem;
+
+
         }
     }
  
